@@ -18,6 +18,7 @@ const RequestLeave: React.FC = () => {
   const [userId, setUserId] = useState<string | null>(null); // إضافة حالة لتخزين userId
 
   useEffect(() => {
+    // التحقق من صلاحية التوكن وجلب userId
     const fetchUserId = async () => {
       try {
         const response = await fetch("http://localhost:5122/api/auth/verify-token", {
@@ -25,17 +26,19 @@ const RequestLeave: React.FC = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include",
+          credentials: "include", // استخدام الكوكيز هنا
         });
 
         if (response.ok) {
           const data = await response.json();
-          setUserId(data.userId)
+          setUserId(data.userId); // تخزين userId في الحالة
         } else {
           console.error("❌ Failed to verify token:", response.status);
+          setError("User is not authenticated.");
         }
       } catch (error) {
         console.error("❌ Error fetching user ID:", error);
+        setError("Something went wrong. Please try again.");
       }
     };
 
@@ -43,29 +46,33 @@ const RequestLeave: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    // جلب الطلبات السابقة بعد التحقق من userId
     const fetchLeaveRequests = async () => {
-      try {
-        const response = await fetch("http://localhost:5122/api/LeaveRequest/my-requests", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+      if (userId) {
+        try {
+          const response = await fetch("http://localhost:5122/api/LeaveRequest/my-requests", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem('token')}` // إرسال التوكن في الهيدر
+            },
+            credentials: "include", // إرسال الكوكيز
+          });
 
-        if (response.ok) {
-          const data = await response.json();
-          setLeaveRequests(data);
-        } else {
-          console.error("❌ Failed to fetch leave requests:", response.status);
+          if (response.ok) {
+            const data = await response.json();
+            setLeaveRequests(data);
+          } else {
+            console.error("❌ Failed to fetch leave requests:", response.status);
+          }
+        } catch (error) {
+          console.error("❌ Error fetching leave requests:", error);
         }
-      } catch (error) {
-        console.error("❌ Error fetching leave requests:", error);
       }
     };
 
     fetchLeaveRequests();
-  }, []);
+  }, [userId]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -87,6 +94,7 @@ const RequestLeave: React.FC = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('token')}`,
         },
         credentials: "include",
         body: JSON.stringify(requestData),
@@ -99,6 +107,7 @@ const RequestLeave: React.FC = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('token')}`
           },
           credentials: "include",
         });
@@ -108,7 +117,6 @@ const RequestLeave: React.FC = () => {
           setLeaveRequests(data);
         }
 
-    
         setReason("");
         setStartDate("");
         setEndDate("");
@@ -161,16 +169,15 @@ const RequestLeave: React.FC = () => {
         </form>
 
         <h2 className="subtitle">Previous Leave Requests</h2>
-            <ul className="request-list">
-      {leaveRequests.map((request) => (
-        <li key={request.id} className="request-item">
-          <strong>{request.reason}</strong> — {request.startDate} to {request.endDate}
-          <br />
-          <span>Employee ID: {request.employeeId}</span> 
-        </li>
-      ))}
-    </ul>
-
+        <ul className="request-list">
+          {leaveRequests.map((request) => (
+            <li key={request.id} className="request-item">
+              <strong>{request.reason}</strong> — {request.startDate} to {request.endDate}
+              <br />
+              <span>Employee ID: {request.employeeId}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

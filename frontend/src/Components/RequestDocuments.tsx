@@ -30,11 +30,11 @@ const RequestDocuments = () => {
   const handleSendRequest = async () => {
     if (employeeId && requestedDocuments) {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          setMessage("HR not logged in. Please log in again.");
-          return; 
-        }
+        //  const token = localStorage.getItem("token");
+        // if (!token) {
+        //   setMessage("HR not logged in. Please log in again.");
+        //   return; 
+        // }
         
         const response = await fetch(`http://localhost:5122/api/employee/search?employeeId=${employeeId}`);
         
@@ -51,14 +51,15 @@ const RequestDocuments = () => {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`, 
               },
+              credentials: "include", 
               body: JSON.stringify({
                 employeeId,
                 hrId,
                 requestText: requestedDocuments,
               }),
             });
+            
   
             if (documentResponse.ok) {
               setMessage(`Request sent for ${requestedDocuments} to Employee ID: ${employeeId}`);

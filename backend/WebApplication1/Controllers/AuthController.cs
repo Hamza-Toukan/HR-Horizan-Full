@@ -113,7 +113,7 @@ namespace WebApplication1.Controllers
                     HttpOnly= true,
                     Secure = false,
                     SameSite = SameSiteMode.Lax,
-                    Expires = DateTime.UtcNow.AddHours(2)
+                    Expires = DateTime.UtcNow.AddHours(5)
                 });
                 return Ok(new { Role = "HR", CompanyId = hr.CompanyId  }); // no need to return the token
             }
@@ -131,7 +131,7 @@ namespace WebApplication1.Controllers
                 Response.Cookies.Append("jwt", token, new CookieOptions
                 {
                     HttpOnly = true, // this will revent from benig accessed by javascript 
-                    Secure = false,
+                    Secure =false, 
                     SameSite = SameSiteMode.Lax,
                     Expires = DateTime.UtcNow.AddHours(2)
                 });

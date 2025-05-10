@@ -38,6 +38,7 @@ const PasswordReset: React.FC = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ token, newPassword }),
+        credentials: "include",
       });
 
       const data = await response.json();
