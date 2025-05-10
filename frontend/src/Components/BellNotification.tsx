@@ -25,7 +25,10 @@ const BellNotification: React.FC = () => {
       }
 
       try {
-        const response = await fetch(`http://localhost:5122/api/employee/notifications?employeeId=${employeeId}`);
+        const response = await fetch(`http://localhost:5122/api/employee/notifications?employeeId=${employeeId}`, {
+          method: "GET",
+          credentials: "include",
+        });
         if (response.ok) {
           const data = await response.json();
           setNotifications(data);

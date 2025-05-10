@@ -32,7 +32,7 @@ var jwtKey = builder.Configuration["Jwt:Key"]
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.RequireHttpsMetadata = true;
+        options.RequireHttpsMetadata = false;
         options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -59,6 +59,8 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UseRouting();
+
 // 7. Enable CORS (Place before authentication & authorization)
 app.UseCors("AllowReactApp");
 
@@ -74,8 +76,7 @@ app.Use(async (context, next) =>
 });
 
 // 8. Enable Authentication & Authorization Middleware
-app.UseHttpsRedirection();
-app.UseRouting();
+// app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 if (app.Environment.IsDevelopment())

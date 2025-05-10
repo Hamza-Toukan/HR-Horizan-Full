@@ -58,6 +58,10 @@ namespace WebApplication1.Controllers
                 ClockSkew = TimeSpan.Zero
             }, out SecurityToken validatedToken);
 
+            var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value; 
+            var userRole = claimsPrincipal.FindFirst(ClaimTypes.Role)?.Value; 
+            var hrId = claimsPrincipal.FindFirst("hrId")?.Value;
+
             Console.WriteLine("Token is vaild ✅");
             return Ok (new {message = "User is authenticated"});
         }
@@ -278,7 +282,8 @@ namespace WebApplication1.Controllers
             var expirationTime = DateTime.UtcNow.AddHours(2);
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, identifier), // Store email or unique identifier here
+                new Claim(ClaimTypes.NameIdentifier, identifier),
+                // new Claim(JwtRegisteredClaimNames.Sub, identifier), // Store email or unique identifier here
                 new Claim(ClaimTypes.Role, role),
                 new Claim("hrId", hrId.ToString()), // HR ID claim
             };

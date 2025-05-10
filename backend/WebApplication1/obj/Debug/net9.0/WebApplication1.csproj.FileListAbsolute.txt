@@ -511,3 +511,4 @@ C:\GraduationProject\HR--main\backend\WebApplication1\obj\Debug\net9.0\refint\We
 C:\GraduationProject\HR--main\backend\WebApplication1\obj\Debug\net9.0\WebApplication1.pdb
 C:\GraduationProject\HR--main\backend\WebApplication1\obj\Debug\net9.0\WebApplication1.genruntimeconfig.cache
 C:\GraduationProject\HR--main\backend\WebApplication1\obj\Debug\net9.0\ref\WebApplication1.dll
+C:\GraduationProject\HR--main\backend\WebApplication1\obj\Debug\net9.0\WebApplication1.sourcelink.json

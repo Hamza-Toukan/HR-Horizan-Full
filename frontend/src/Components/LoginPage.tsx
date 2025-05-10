@@ -34,8 +34,7 @@ const LoginPage: React.FC<{ setIsLoggedIn: React.Dispatch<React.SetStateAction<b
       if (response.ok) {
         setIsLoggedIn(true);
         localStorage.setItem("token", data.token); 
-        console.log("User Role:", data.role);
-
+        console.log(localStorage.getItem("token"));
         // Redirect based on user role
         if (data.role === "Employee") {
           navigate("/employee");

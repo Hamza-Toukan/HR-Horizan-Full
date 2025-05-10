@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useNavigate, Navigate } from "react-router-dom";
+import Dashboard from "./Pages/Dashboard";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import LoginPage from "./Components/LoginPage";
@@ -104,31 +105,16 @@ function App() {
           {/* Protected Routes: Only accessible if logged in */}
           <Route
             path="/employee/*"
-            element={
-              isLoggedIn ? <EmployeePage /> : <RedirectToLogin />
-            }
+            element={isLoggedIn ? <EmployeePage /> : <Navigate to="/login" />}
           />
           <Route
             path="/hr/*"
-            element={
-              isLoggedIn ? <HrPage /> : <RedirectToLogin />
-            }
+            element={isLoggedIn ? <HrPage /> : <Navigate to="/login" />}
           />
         </Routes>
       </div>
     </Router>
   );
 }
-
-// Component to handle redirection
-const RedirectToLogin = () => {
-  const navigate = useNavigate(); // useNavigate hook should be used here
-
-  useEffect(() => {
-    navigate("/login"); // Redirect to login page
-  }, [navigate]);
-
-  return null; // This component does not render anything
-};
 
 export default App;
